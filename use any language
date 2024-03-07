@@ -1,0 +1,31 @@
+import requests
+from bs4 import BeautifulSoup
+
+def get_latest_stories():
+    # URL of Time.com
+    url = "https://time.com/"
+
+    # Send a GET request to the website
+    response = requests.get(url)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        # Parse the HTML content of the page
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Find the container with the latest stories (you need to inspect the HTML structure for this)
+        stories_container = soup.find('div', class_='latest-stories-container')
+
+        # Extract the latest 6 stories
+        latest_stories = stories_container.find_all('a')[:6]
+
+        # Print the titles and URLs of the latest stories
+        for story in latest_stories:
+            title = story.text.strip()
+            url = story['href']
+            print(f"{title}: {url}")
+    else:
+        print(f"Failed to retrieve content. Status code: {response.status_code}")
+
+# Call the function to get the latest stories
+get_latest_stories()
